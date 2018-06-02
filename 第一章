@@ -1,0 +1,52 @@
+libname saslib base 'd:\sas\data';                                                                                                      
+                                                                                                                                        
+data saslib.Inventory;                                                                                                                  
+   input Product_ID$ Instock Price;                                                                                                     
+   datalines;                                                                                                                           
+p001r 12 125.00                                                                                                                         
+p003t 34 40.00                                                                                                                          
+p301m 23 500.00                                                                                                                         
+pc02m 12 100.00                                                                                                                         
+;                                                                                                                                       
+title'仓库库存';    
+                                                                                                                                        
+proc print data=saslib.inventory;                                                                                                       
+run;
+                                                                                                                          
+/*逻辑库引用*/
+/*libname 逻辑库名 逻辑库引擎 逻辑库位置*/
+/*work是临时库*/
+
+proc contents data=saslib.inventory;
+run;
+/*contents 可以查看数据集的各个参数*/
+
+/*sas的日期是从1960年1月1日开始，开始日期可以通过系统变量yearcutoff指定为其他值*/
+
+/*数据格式的调用*/
+/*dsd表示指定数据的间隔 ，missover是遇到数据不全接受空值*/
+data saslib.sales;
+  infile datalines dsd delimiter=',' missover;
+
+  input Emp_ID $ Dept $ Sales Date;
+   format Sales COMMA10. Date yymmdd10.;
+   informat Sales dollar10. Date date9.;
+   label Emp_ID ='yuangongID' Dept='bumen' Sales='xiaoshoushuju';
+   label Date='xiaoshoushijian';
+ datalines;
+et001,tsg,$10000,01jan2012
+ed002,,$12000,01feb2012
+et004,tsg,$5000,02mar2012
+ed004,qsg,,01aug2012
+;
+run;
+
+proc contents data=saslib.sales;
+run;
+
+proc print data=saslib.sales noobs lable;
+run; 
+
+/*commaw.d w表示最大宽度 d为小数位数*/
+/*data9. 格式为 01aug2012 YYMMDD10. 跟以前记忆的一样*/
+/*format是显示格式，informat是输入时需要的格式*/
