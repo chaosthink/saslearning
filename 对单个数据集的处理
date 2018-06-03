@@ -1,0 +1,166 @@
+/*对单个数据集进行处理*/
+data work.shoes_part1;
+  set sashelp.shoes(keep=Product Stores Sales);
+run;
+
+/*keep参数是用来声明复制数据集时保留的字段*/
+
+proc print data=work.shoes_part1 (obs=5) noobs;
+run;
+
+data work.shoes_part1;
+  set sashelp.shoes(keep=Product Stores Sales);
+  format Sales comma10.2 ;
+run;
+
+data work.shoes_part2;
+   set sashelp.shoes (drop=Region Subsidiary Inventory Returns);
+run;
+/*drop表示去掉哪些变量*/
+/*相似用法*/
+
+data work.shoes_part3;
+  set sashelp.shoes;
+  keep Product Stores Sales;
+run;
+
+/*换成drop语句也差不多*/
+
+/*但是 keep= 语句可以操作更多的数据集*/
+
+data work.shoes_sales(keep=Product Stores Sales)
+  work.shoes_inventory(keep=Product Inventory Returns);
+  set sashelp.shoes;
+run;
+/*同时操作了两个数据集*/
+
+/*上下可以同时用，提高效率*/
+data work.shoes_sales(keep=Product Stores Sales)
+   work.shoes_inventory(keep=Product Inventory Returns);
+  set sashelp.shoes(drop=Region Subsidiary);
+run;
+
+data work.contact_address;
+   set saslib.contact;
+   if address="" then delete; 
+run;
+
+data work.contact_manager;
+   set saslib.contact;
+   if position="Manager";
+run;
+
+/*使用output*/
+data work.contact_manager
+     work.contact_otrhers;
+	set saslib.contact;
+	if position='Manager' then output work.contact_manager;
+	else output work.contact_others;
+run;
+
+data work.contact_manager
+      work.contact_agege35;
+	set saslib.contact;
+	if position='Manager' then output work.contact_manager;
+	if age>=35 then output work.contact_agege35;
+run;
+
+data work.Inventory2;
+    set saslib.Inventory;
+	if Region^='BJ' then Price2=Price*1.2;
+run;
+
+/*可以直接赋值到新变量*/
+data work.Inventory3;
+   set saslib.Inventory;
+   if Region='bj' then Price=Price*1.2;
+   else Price=Price*1.1;
+run;
+
+/*do组 ，批量条件实现*/
+data work.Inventory4;
+  set saslib.Inventory;
+  if Region='bj' then 
+    do;
+	  Price=Price*1.2;
+	  Instock=Instock*2;
+	end;
+  else
+    do;
+	   Price=Price*1.1;
+	   Instock=Instock*2;
+	end;
+run;
+
+/*在if条件中 ，使用do组可以批量实现变量操作*/
+data work.Inventory5;
+   set saslib.Inventory;
+   if Region='bj' then
+      Price1=Price*1.2;
+   else if Region='sh' then
+      Price2=Price*1.15;
+	 else
+	  Price3=Price*1.1;
+run;
+/*嵌套条件，就是疯狂套*/
+
+/*select语句*/
+data work.Inventory6;
+  set saslib.Inventory;
+  select (Region);
+   when ('bj') Price1=Price*1.2;
+   when('sh') Price2=Price*1.15;
+   otherwise Price3=Price*1.1;
+ end;
+run;
+
+/*分组和排序*/
+
+/*通过proc步实现*/
+proc sort data=saslib.employee out=saslib.employee_sorted;
+  by Dept Entry_Date;
+run;
+
+proc sort data=saslib.employee out=saslib.employee_descending;
+  by Dept descending Entry_Date;
+run;
+/*设置降序*/
+
+/*排序后可以取头和尾的数据*/
+data work.employee_fl;
+  set saslib.employee_sorted;
+  by Dept;
+  if first.Dept or last.dept;
+run;
+
+proc import out=saslib.contact2_raw
+    datafile='D:\sas\data\ch3\contact2.csv'
+	dbms=csv replace;
+	getnames=yes;
+	datarow=2;
+run;
+
+proc sort data=saslib.contact2_raw
+   out=saslib.contact2
+   dupout=work.contact2_dup
+   nodupkey;
+   by Name;
+run;
+/*通过nodupkey删除重复值（字段name），并通过dupout保存下来，*/
+
+ data work.contact2_rn;
+   set saslib.contact2(rename=(Name=Full_name));
+   First_Name=scan(Full_Name,1);
+   Last_Name=scan(Full_Name,2);
+run;
+
+/*scan 是读取字符串位置的函数，可以用1 2 -1 等来表示*/
+
+data work.contact2_rn (rename=(Name=Full_Name));
+  set saslib.contact2;
+      First_Name=scan(Name,1);
+	Last_Name=scan(Name,2);
+run;
+/*结果跟上述类似*/
+/*rename跟keep drop类似 都可以用在data步后面 set后面或者语句中*/
+/*在上面的使用需要用等于号，在语句中不需要*/
