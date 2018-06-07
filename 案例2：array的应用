@@ -1,0 +1,137 @@
+
+
+libname saslib base 'd:\sas\data';
+
+**------v1------------;
+data homework.q3_1;
+set saslib.test;
+first_curre_repay_date=s01_curr_repay_date;
+array od(*) s01_overdue_stages 
+                 s02_overdue_stages
+				 s03_overdue_stages
+				 s04_overdue_stages
+				 s05_overdue_stages
+				 s06_overdue_stages
+				 s07_overdue_stages
+				 s08_overdue_stages
+				 s09_overdue_stages
+				 s10_overdue_stages
+				 s11_overdue_stages
+				 s12_overdue_stages
+				 s13_overdue_stages
+				 s14_overdue_stages
+				 s15_overdue_stages
+				 s16_overdue_stages
+				 s17_overdue_stages
+				 s18_overdue_stages
+				 s19_overdue_stages
+				 s20_overdue_stages
+				 s21_overdue_stages
+				 s22_overdue_stages
+				 s23_overdue_stages
+				 s24_overdue_stages
+				 s25_overdue_stages;
+array res(*) s01_residual_amount
+                 s02_residual_amount
+				 s03_residual_amount
+				 s04_residual_amount
+				 s05_residual_amount
+				 s06_residual_amount
+				 s07_residual_amount
+				 s08_residual_amount
+				 s09_residual_amount
+				 s10_residual_amount
+				 s11_residual_amount
+				 s12_residual_amount
+				 s13_residual_amount
+				 s14_residual_amount
+				 s15_residual_amount
+				 s16_residual_amount
+				 s17_residual_amount
+				 s18_residual_amount
+				 s19_residual_amount
+				 s20_residual_amount
+				 s21_residual_amount
+				 s22_residual_amount
+				 s23_residual_amount
+				 s24_residual_amount
+				 s25_residual_amount;
+array cr(*) s01_curr_repay_date
+                 s02_curr_repay_date
+				 s03_curre_repay_date
+				 s04_curr_repay_date
+				 s05_curr_repay_date
+				 s06_curr_repay_date
+				 s07_curr_repay_date
+				 s08_curr_repay_date
+				 s09_curr_repay_date
+				 s10_curr_repay_date
+				 s11_curr_repay_date
+				 s12_curr_repay_date
+				 s13_curr_repay_date
+				 s14_curr_repay_date
+				 s15_curr_repay_date
+				 s16_curr_repay_date
+				 s17_curr_repay_date
+				 s18_curr_repay_date
+				 s19_curr_repay_date
+				 s20_curr_repay_date
+				 s21_curr_repay_date
+				 s22_curr_repay_date
+				 s23_curr_repay_date
+				 s24_curr_repay_date
+				 s25_curr_repay_date;
+array rd(*) s01_repayed_date
+                 s02_repayed_date
+				 s03_repayed_date
+				 s04_repayed_date
+				 s05_repayed_date
+				 s06_repayed_date
+				 s07_repayed_date
+				 s08_repayed_date
+				 s09_repayed_date
+				 s10_repayed_date
+				 s11_repayed_date
+				 s12_repayed_date
+				 s13_repayed_date
+				 s14_repayed_date
+				 s15_repayed_date
+				 s16_repayed_date
+				 s17_repayed_date
+				 s18_repayed_date
+				 s19_repayed_date
+				 s20_repayed_date
+				 s21_repayed_date
+				 s22_repayed_date
+				 s23_repayed_date
+				 s24_repayed_date
+				 s25_repayed_date;
+do i = apply_stages_nbr+1 to dim(od); 
+if od(i-1) = 0  then do;
+       od(i)=0; res(i)=0; 
+		cr(i)=compress(put(intnx('month',input(first_curre_repay_date, yymmdd10.),i,"S"),yymmdd10.));
+	   end;
+ if od(i-1) =.  then do;
+       cr(i)=compress(put(intnx('month',input(first_curre_repay_date, yymmdd10.),i,"S"),yymmdd10.));
+	   end;
+
+ if od(i-1) > 0  then do;
+       if rd(i-1)="" then do;
+			res(i)=res(i-1);od(i)=od(i-1)+1; 
+			cr(i)=compress(put(intnx('month',input(first_curre_repay_date, yymmdd10.),i,"S"),yymmdd10.));
+		end;
+	   if rd(i-1) ne "" then do;
+               if rd(i-1) <= compress(put(intnx('month',input(first_curre_repay_date, yymmdd10.),i,"S"),yymmdd10.)) then do;
+					od(i)=0;res(i)=0; 
+					cr(i)=compress(put(intnx('month',input(first_curre_repay_date, yymmdd10.),i,"S"),yymmdd10.));
+				end;
+			   if rd(i-1) > compress(put(intnx('month',input(first_curre_repay_date, yymmdd10.),i,"S"),yymmdd10.)) then do;
+					od(i)=od(i-1)+1;res(i)=res(i-1);
+					cr(i)=compress(put(intnx('month',input(first_curre_repay_date, yymmdd10.),i,"S"),yymmdd10.));
+				end;
+            end;
+	   end;
+end;
+
+run;
+**解决了连续期数的问题
