@@ -1,0 +1,12 @@
+libname homework base 'D:\sas\data\作业-方肇星\data';
+data homework.q1;
+
+format c1 datetime18.;
+/*设定c1格式*/
+c1=input('3jan16:00:00:00',datetime18.);  
+/*输入c1，并转化为数值*/
+c2=put(intnx('hour',c1,1,'S'),datetime18.);
+c3=put(intnx('minute',c1,-1,'S'),datetime18.);
+c4=put(intnx('second',c1,1,'S'),datetime18.);
+/*分别用hour minute second操作时分秒的更改*/
+run;
