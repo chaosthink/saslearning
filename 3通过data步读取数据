@@ -1,0 +1,26 @@
+/*通过data步读取数据*/
+libname saslib 'D:\sas\data';
+data saslib.inventory;
+  input Product_ID$ Instock Price;
+  Cost=Price*0.15;
+  datalines;
+p001r 12 125.00
+p003t 34 40.00
+p301m 23 500.00
+pc02m 12 100.00
+;
+run;
+
+/*读取外部数据*/
+filename extfiles 'd:\sas\data'; 
+/*指定外部文件存储的位置*/
+data saslib.inventory;
+  infile extfiles(inventory);
+  input Product_ID$;
+run;
+
+data saslib.Inventory;
+  infile extfiles(inventory_dlm) dlm=',';
+  input Product_ID $ Instock Price;
+run;
+/*dlm用来指定间隔*/
