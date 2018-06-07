@@ -1,0 +1,51 @@
+/*循环和数组*/
+/*do和do组不一样*/
+data work.squarel
+  do x=1 to 5 by 2;
+    y=x**2;
+	output;
+run;
+
+data work.all;
+  length word $20;
+  drop string;
+  string='the quick brown fox jumps over the lazy dog';
+  do until(lengthn(word)=0);
+    count+1;
+	word=scan(string,count);
+	output;
+ end;
+run;
+/*lengthn是计算字符串长度的函数*/
+/*do while*/
+data work.all;
+  length word $20;
+  drop string;
+  string='  ';
+  word=scan(string,1);
+  do while(lenghtn(word)>0);
+      count+1;
+	  word=scan(string,count);
+	  output;
+	end;
+run;
+
+/*数组*/
+/*对多变量进行相同对操作，使用数组可以简化代码*/
+
+/*array store{4} macys penneys sears target;*/
+/*store{1}就表示是 macys*/
+/*dim返回指定维度的元素个数*/
+/*lbound返回数组的下边界*/
+/*hbound返回数组的上边界*/
+
+data saslib.revenue_2014;
+  set saslib.revenue_quarter;
+  array Quarter{4} Rev_Q1-Rev_Q4;
+  do i=1 to 4;
+    Quarter{i}=Quarter{i}*1.5;
+  end;
+  drop i ;
+run;
+
+/*理解成R里的 apply 即可，操作组函数*/
