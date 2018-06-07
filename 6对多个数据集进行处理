@@ -1,0 +1,36 @@
+/*对多个数据集对处理*/
+data work.New_Employee;
+   input Emp_ID $ Emp_Name $ @@;
+   datalines;
+et001 jimmy ed003 emy ec002 alfred eq004 kim 
+;
+run;
+
+data work.old_employee;
+   input emp_id $ emp_name $ @@;
+   datalines;
+
+eq122 molly et121 dillon et123 helen ed124 john
+;
+run;
+
+data work.employee;
+  set work.old_employee work.new_employee;
+run;
+proc print data=work.old_employee;
+  title 'old employee';
+run;
+
+data work.new_employee_dept;
+  set work.new_employee;
+  if substr(emp_id,2,1)='t' then dept='tsg';
+  else if substr(emp_id,2,1)='q' then dept='qsg';
+  else if substr(emp_id,2,1)='d' then dept='dsg';
+  else if substr(emp_id,2,1)='c' then dept='csg';
+run;
+
+data work.old_employee_gen;
+  set work.old_employee;
+  if mod(substr(emp_id,length(trim(emp_id),1,2)=0 then gender='F';
+  else gender='m';
+run; 
