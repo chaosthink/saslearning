@@ -1,0 +1,116 @@
+/*常用函数*/
+
+/*sum(x,y,...) 对指定参数求和*/
+/*mean(x1,x2,x3...)*/
+/*median   返回中值*/
+/*int   返回整数值*/
+/*round 四舍五入*/
+/*max */
+/*min*/
+
+/*字符函数*/
+/*length 返回字符串长度，不包括空格，若为空字符串则返回1*/
+/*lengthn 若为空值则返回0*/
+/*left 讲字符串左对齐*/
+/*right 右对齐*/
+/*trim 删除尾缀空格*/
+/*trimn 类上 若为空字符串则返回0*/
+/*index(源字符串，目标字符串) 在源串中搜索目标字符串 找到返回第一次出现的位置，没找到返回0*/
+/*substr(字符串,位置，长度) 检索固定长度  等于号在前面表示赋值到变量 等于号在后面表示替换*/
+/*scan 一个个字符串浏览*/
+/*Cat(arg1,arg2,....argn)连接字符串并且保留原来字符串之间的空格*/
+/**/
+/*Cats(agr1,arg2,...,argn)连接字符串并且去掉原来字符之间的空格*/
+/*Catx('separator-sign',arg1,arg2,...,argn)连接字符串去掉字符串间的空格增加设定的连接符*/
+
+libname saslib base 'd:\sas\data';
+
+data work.contact2;
+  set saslib.contact2;
+  split=index(Name,' ');
+  first_name=substr(Name,1,split-1);
+  last_name=substr(Name,split+1);
+  drop split;
+run;
+/*找到变量name中 的空格，并且使用substr选取出前后名字*/
+
+/*put函数 put(x,type)*/
+data saslib.employee2;
+  set saslib.employee2;
+  New_Emp_ID=put(Emp_ID,best10.);
+  drop Emp_ID;
+  rename New_Emp_ID=Emp_ID;
+run;
+
+/*input(源，格式） 源应当为字符串*/
+data saslib.sales;
+  set saslib.sales;
+  Num_Date=input(Date,date9.);
+  drop Date;
+  rename Num_Date=Date;
+run;
+
+/*日期函数*/
+/*year month day 返回sas日期值中的年月日*/
+/*qtr week 返回日期指中的季度 周*/
+/*hour minute second 返回时分秒*/
+/*datapart 从完整日期时间中抽取日期*/
+/*date time datetime 返回当前的日期 时间 日期时间*/
+/*常用函数*/
+
+/*sum(x,y,...) 对指定参数求和*/
+/*mean(x1,x2,x3...)*/
+/*median   返回中值*/
+/*int   返回整数值*/
+/*round 四舍五入*/
+/*max */
+/*min*/
+
+/*字符函数*/
+/*length 返回字符串长度，不包括空格，若为空字符串则返回1*/
+/*lengthn 若为空值则返回0*/
+/*left 讲字符串左对齐*/
+/*right 右对齐*/
+/*trim 删除尾缀空格*/
+/*trimn 类上 若为空字符串则返回0*/
+/*index(源字符串，目标字符串) 在源串中搜索目标字符串 找到返回第一次出现的位置，没找到返回0*/
+/*substr(字符串,位置，长度) 检索固定长度  等于号在前面表示赋值到变量 等于号在后面表示替换*/
+/*scan 一个个字符串浏览*/
+/*Cat(arg1,arg2,....argn)连接字符串并且保留原来字符串之间的空格*/
+/**/
+/*Cats(agr1,arg2,...,argn)连接字符串并且去掉原来字符之间的空格*/
+/*Catx('separator-sign',arg1,arg2,...,argn)连接字符串去掉字符串间的空格增加设定的连接符*/
+
+libname saslib base 'd:\sas\data';
+
+data work.contact2;
+  set saslib.contact2;
+  split=index(Name,' ');
+  first_name=substr(Name,1,split-1);
+  last_name=substr(Name,split+1);
+  drop split;
+run;
+/*找到变量name中 的空格，并且使用substr选取出前后名字*/
+
+/*put函数 put(x,type)*/
+data saslib.employee2;
+  set saslib.employee2;
+  New_Emp_ID=put(Emp_ID,best10.);
+  drop Emp_ID;
+  rename New_Emp_ID=Emp_ID;
+run;
+
+/*input(源，格式） 源应当为字符串*/
+data saslib.sales;
+  set saslib.sales;
+  Num_Date=input(Date,date9.);
+  drop Date;
+  rename Num_Date=Date;
+run;
+
+/*日期函数*/
+/*year month day 返回sas日期值中的年月日*/
+/*qtr week 返回日期指中的季度 周*/
+/*hour minute second 返回时分秒*/
+/*datapart 从完整日期时间中抽取日期*/
+/*date time datetime 返回当前的日期 时间 日期时间*/
